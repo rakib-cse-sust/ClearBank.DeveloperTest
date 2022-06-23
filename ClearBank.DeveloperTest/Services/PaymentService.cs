@@ -15,7 +15,7 @@ namespace ClearBank.DeveloperTest.Services
             IAccountGetProviderFactory accountGetProviderFactory
             )
         {
-            _dataStoreType = configurationManager.Configurations.DataStoreType;
+            _dataStoreType = configurationManager.DataStoreType;
             _paymentSchemeProviderFactory = paymentSchemeProviderFactory;
             _accountGetProviderFactory = accountGetProviderFactory;
         }
