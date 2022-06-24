@@ -92,7 +92,7 @@ namespace ClearBank.DeveloperTest.Services
             {
                 _logger.LogError(e, "MakePayment - Unexpected error.");
 
-                throw; //new InvalidOperationException("MakePayment - Unexpected error.");
+                throw;
             }
         }
     }
