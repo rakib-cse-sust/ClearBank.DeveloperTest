@@ -59,5 +59,39 @@ namespace ClearBank.DeveloperTest.Tests
 
             Assert.True(result);
         }
+
+        [Fact]
+        public void MakeBackupAccountPayment_ReturnPaymentResult_WhenPaymentRequestInvalid()
+        {
+            // Arrange
+
+            var request = new MakePaymentRequest()
+            {
+                Amount = 0,
+                DebtorAccountNumber = "AB1234",
+                PaymentScheme = PaymentScheme.Bacs
+            };
+
+            var account = new Account()
+            {
+                AccountNumber = "AB1234",
+                Status = AccountStatus.Live,
+                Balance = 1500
+            };
+
+            Mock<IAccountGetProviderFactory> _accountMock = new Mock<IAccountGetProviderFactory>();
+            Mock<IPaymentSchemeProviderFactory> _paymentMock = new Mock<IPaymentSchemeProviderFactory>();
+            Mock<ILogger<PaymentService>> _loggerMock = new Mock<ILogger<PaymentService>>();
+
+            var sut = new PaymentService(_paymentMock.Object, _accountMock.Object, _configurationManager, _loggerMock.Object);
+
+            // Act
+
+            var result = sut.MakePayment(request).Success;
+
+            // Assert
+
+            Assert.True(result);
+        }
     }
 }
