@@ -1,23 +1,31 @@
 ﻿using ClearBank.DeveloperTest.Interfaces;
 using ClearBank.DeveloperTest.Types;
+using Microsoft.Extensions.Logging;
 
 namespace ClearBank.DeveloperTest.Services
 {
     public class PaymentService : IPaymentService
     {
+        ////private readonly ILogger<PaymentService> _logger;
         private readonly DataStoreType _dataStoreType;
         private readonly IPaymentSchemeProviderFactory _paymentSchemeProviderFactory;
         private readonly IAccountGetProviderFactory _accountGetProviderFactory;
 
+        public PaymentService()
+        {
+        }
+
         public PaymentService(
-            IPaymentSchemeProviderFactory paymentSchemeProviderFactory,
-            IConfigurationManager configurationManager,
-            IAccountGetProviderFactory accountGetProviderFactory
+            IPaymentSchemeProviderFactory paymentSchemeProviderFactory,            
+            IAccountGetProviderFactory accountGetProviderFactory,
+            IConfigurationManager configurationManager
+            //ILogger<PaymentService> logger
             )
         {
             _dataStoreType = configurationManager.DataStoreType;
             _paymentSchemeProviderFactory = paymentSchemeProviderFactory;
             _accountGetProviderFactory = accountGetProviderFactory;
+            //_logger = logger;
         }
 
         public MakePaymentResult MakePayment(MakePaymentRequest request)
