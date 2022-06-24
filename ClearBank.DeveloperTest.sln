@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearBank.DeveloperTest", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearBank.DeveloperTest.Tests", "ClearBank.DeveloperTest.Tests\ClearBank.DeveloperTest.Tests.csproj", "{C1C30312-D8AC-42EE-B0CF-381E0CC7079C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "clearbank_developer_test.ConsoleApp", "clearbank_developer_test.ConsoleApp\clearbank_developer_test.ConsoleApp.csproj", "{347D9BD4-4F44-4152-8F2E-B6F9EB0CFE2D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{C1C30312-D8AC-42EE-B0CF-381E0CC7079C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1C30312-D8AC-42EE-B0CF-381E0CC7079C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1C30312-D8AC-42EE-B0CF-381E0CC7079C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{347D9BD4-4F44-4152-8F2E-B6F9EB0CFE2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{347D9BD4-4F44-4152-8F2E-B6F9EB0CFE2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{347D9BD4-4F44-4152-8F2E-B6F9EB0CFE2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{347D9BD4-4F44-4152-8F2E-B6F9EB0CFE2D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

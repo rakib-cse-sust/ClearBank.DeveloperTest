@@ -11,11 +11,13 @@ namespace ClearBank.DeveloperTest.Tests
     public class PaymentServiceTests
     {
         private readonly IConfigurationManager _configurationManager;
+        private readonly ILogger<PaymentService> _logger;
 
-        public PaymentServiceTests()
+        public PaymentServiceTests(ILogger<PaymentService> logger)
         {
             _configurationManager = new ConfigurationManager();
             _configurationManager.DataStoreType = DataStoreType.BackupAccount;
+            _logger = logger;
         }
 
         [Fact]
@@ -55,7 +57,7 @@ namespace ClearBank.DeveloperTest.Tests
             Mock<IAccountGetProviderFactory> _accountMock = new Mock<IAccountGetProviderFactory>();
             Mock<IPaymentSchemeProviderFactory> _paymentMock = new Mock<IPaymentSchemeProviderFactory>();
 
-            var sut = new PaymentService(_paymentMock.Object, _accountMock.Object, _configurationManager);
+            var sut = new PaymentService(_paymentMock.Object, _accountMock.Object, _configurationManager, _logger);
 
             // Act
 

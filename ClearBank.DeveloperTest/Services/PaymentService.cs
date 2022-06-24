@@ -1,6 +1,7 @@
 ﻿using ClearBank.DeveloperTest.Interfaces;
 using ClearBank.DeveloperTest.Types;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace ClearBank.DeveloperTest.Services
 {
@@ -12,7 +13,7 @@ namespace ClearBank.DeveloperTest.Services
         private readonly IAccountGetProviderFactory _accountGetProviderFactory;
 
         public PaymentService(
-            IPaymentSchemeProviderFactory paymentSchemeProviderFactory,            
+            IPaymentSchemeProviderFactory paymentSchemeProviderFactory,
             IAccountGetProviderFactory accountGetProviderFactory,
             IConfigurationManager configurationManager,
             ILogger<PaymentService> logger
@@ -26,32 +27,71 @@ namespace ClearBank.DeveloperTest.Services
 
         public MakePaymentResult MakePayment(MakePaymentRequest request)
         {
+            _logger.LogInformation(string.Format("MakePayment - Request payload: {1}", JsonSerializer.Serialize(request)));
+
             var paymentValidatorResult = new MakePaymentRequestValidator().Validate(request);
 
-            if(!paymentValidatorResult.IsValid)
-                return new MakePaymentResult() { 
-                    Success = false, 
-                    Error = new ErrorDetails() { 
-                        IsException = false, 
-                        ErrorMessage = paymentValidatorResult.ToString("~")
-                    }
+            if (!paymentValidatorResult.IsValid)
+            {
+                var error = new ErrorDetails()
+                {
+                    IsException = false,
+                    ErrorMessage = paymentValidatorResult.ToString("~")
                 };
 
-            var accountGetProvider = _accountGetProviderFactory.GetAccountProvider(_dataStoreType);
-            var account = accountGetProvider.GetAccount(request.DebtorAccountNumber);
+                _logger.LogError(string.Format("MakePayment - {0}", error.ErrorMessage));
 
-            var paymentProvider = _paymentSchemeProviderFactory.GetPaymentSchemeProvider(request.PaymentScheme);
-            var result = paymentProvider.GetPaymentResult(account, request);
-                
-            if (result.Success)
-            {
-                account.Balance -= request.Amount;
-
-                var accountUpdateProvider = _accountGetProviderFactory.GetAccountProvider(_dataStoreType);
-                accountUpdateProvider.UpdateAccount(account);
+                return new MakePaymentResult()
+                {
+                    Success = false,
+                    Error = error
+                };
             }
 
-            return result;
+            try
+            {
+                var accountGetProvider = _accountGetProviderFactory.GetAccountProvider(_dataStoreType);
+                var account = accountGetProvider.GetAccount(request.DebtorAccountNumber);
+
+                var paymentProvider = _paymentSchemeProviderFactory.GetPaymentSchemeProvider(request.PaymentScheme);
+                var result = paymentProvider.GetPaymentResult(account, request);
+
+                if (result.Success)
+                {
+                    account.Balance -= request.Amount;
+
+                    if (account.Balance < 0)
+                    {
+                        var error = new ErrorDetails()
+                        {
+                            IsException = false,
+                            ErrorMessage = "Account balance can't be negetive"
+                        };
+
+                        _logger.LogError(string.Format("{0} - Balance {1}", error.ErrorMessage, account.Balance));
+
+                        return new MakePaymentResult()
+                        {
+                            Success = false,
+                            Error = error
+                        };
+                    }                        
+
+                    var accountUpdateProvider = _accountGetProviderFactory.GetAccountProvider(_dataStoreType);
+                    accountUpdateProvider.UpdateAccount(account);
+
+                    _logger.LogInformation("MakePayment - successful");
+                }
+                else
+                    _logger.LogInformation("MakePayment - unsuccessful");
+
+                return result;
+            }
+            catch (System.Exception e)
+            {
+                _logger.LogError(e, "MakePayment - Unexpected error.");
+                throw;
+            }
         }
     }
 }
