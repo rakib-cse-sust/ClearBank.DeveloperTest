@@ -4,6 +4,7 @@ using ClearBank.DeveloperTest.Interfaces;
 using ClearBank.DeveloperTest.Types;
 using Microsoft.Extensions.Logging;
 using ClearBank.DeveloperTest.Services;
+using System;
 
 namespace ClearBank.DeveloperTest.Tests
 {
@@ -92,6 +93,31 @@ namespace ClearBank.DeveloperTest.Tests
             // Assert
 
             Assert.True(result);
+        }
+
+        [Fact]
+        public void MakeBackupAccountPayment_ReturnPaymentResult_WhenNullReferenceException()
+        {
+            // Arrange
+
+            var request = new MakePaymentRequest()
+            {
+                Amount = 500,
+                DebtorAccountNumber = "AB1234",
+                PaymentScheme = PaymentScheme.Bacs
+            };
+
+            Mock<ILogger<PaymentService>> _loggerMock = new Mock<ILogger<PaymentService>>();
+
+            var sut = new PaymentService(null, null, _configurationManager, _loggerMock.Object);
+
+            // Act
+
+            var exception = Assert.Throws<NullReferenceException>(() => sut.MakePayment(request));
+
+            // Assert
+
+            Assert.Equal("Object reference not set to an instance of an object.", exception.Message);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using ClearBank.DeveloperTest.Interfaces;
 using ClearBank.DeveloperTest.Types;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Text.Json;
 
 namespace ClearBank.DeveloperTest.Services
@@ -87,10 +88,11 @@ namespace ClearBank.DeveloperTest.Services
 
                 return result;
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 _logger.LogError(e, "MakePayment - Unexpected error.");
-                throw;
+
+                throw; //new InvalidOperationException("MakePayment - Unexpected error.");
             }
         }
     }
