@@ -17,6 +17,8 @@ namespace ClearBank.DeveloperTest.Services.PaymentTypes
             {
                 result.Success = false;
             }
+            else
+                result.Success = true;
 
             return result;
         }
