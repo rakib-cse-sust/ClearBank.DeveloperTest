@@ -10,10 +10,6 @@ namespace ClearBank.DeveloperTest.Tests
 {
     public class PaymentServiceTests
     {
-        //private readonly Mock<ILogger<PaymentService>> _loggerMock = new Mock<ILogger<PaymentService>>();
-        //private readonly Mock<IAccountGetProviderFactory> _accountMock = new Mock<IAccountGetProviderFactory>();
-        //private readonly Mock<IPaymentSchemeProviderFactory> _paymentMock = new Mock<IPaymentSchemeProviderFactory>();
-        //private readonly PaymentService _paymentService;
         private readonly IConfigurationManager _configurationManager;
 
         public PaymentServiceTests()
@@ -44,9 +40,8 @@ namespace ClearBank.DeveloperTest.Tests
 
             var request = new MakePaymentRequest() 
             { 
-                Amount = 500,
+                Amount = 0,
                 DebtorAccountNumber = "AB1234",
-                PaymentDate = DateTime.UtcNow,
                 PaymentScheme = PaymentScheme.Bacs
             };
 
