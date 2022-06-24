@@ -27,7 +27,7 @@ namespace ClearBank.DeveloperTest.Services
 
         public MakePaymentResult MakePayment(MakePaymentRequest request)
         {
-            _logger.LogInformation(string.Format("MakePayment - Request payload: {1}", JsonSerializer.Serialize(request)));
+            _logger.LogInformation(string.Format("MakePayment - Request payload: {0}", JsonSerializer.Serialize(request)));
 
             var paymentValidatorResult = new MakePaymentRequestValidator().Validate(request);
 

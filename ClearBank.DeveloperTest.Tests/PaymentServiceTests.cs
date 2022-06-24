@@ -1,4 +1,3 @@
-using System;
 using Xunit;
 using Moq;
 using ClearBank.DeveloperTest.Interfaces;
@@ -11,28 +10,11 @@ namespace ClearBank.DeveloperTest.Tests
     public class PaymentServiceTests
     {
         private readonly IConfigurationManager _configurationManager;
-        private readonly ILogger<PaymentService> _logger;
 
-        public PaymentServiceTests(ILogger<PaymentService> logger)
+        public PaymentServiceTests()
         {
             _configurationManager = new ConfigurationManager();
             _configurationManager.DataStoreType = DataStoreType.BackupAccount;
-            _logger = logger;
-        }
-
-        [Fact]
-        public void Should_return_all_payment_test()
-        {
-            var request = new MakePaymentRequest()
-            {
-                Amount = 10,
-                DebtorAccountNumber = "AB1234",
-                PaymentDate = DateTime.UtcNow,
-                PaymentScheme = PaymentScheme.FasterPayments
-            };
-
-            var service = new PaymentServiceOld();
-            var result = service.MakePayment(request);
         }
 
         [Fact]
@@ -42,7 +24,7 @@ namespace ClearBank.DeveloperTest.Tests
 
             var request = new MakePaymentRequest() 
             { 
-                Amount = 0,
+                Amount = 500,
                 DebtorAccountNumber = "AB1234",
                 PaymentScheme = PaymentScheme.Bacs
             };
@@ -56,8 +38,9 @@ namespace ClearBank.DeveloperTest.Tests
 
             Mock<IAccountGetProviderFactory> _accountMock = new Mock<IAccountGetProviderFactory>();
             Mock<IPaymentSchemeProviderFactory> _paymentMock = new Mock<IPaymentSchemeProviderFactory>();
+            Mock<ILogger<PaymentService>> _loggerMock = new Mock<ILogger<PaymentService>>();
 
-            var sut = new PaymentService(_paymentMock.Object, _accountMock.Object, _configurationManager, _logger);
+            var sut = new PaymentService(_paymentMock.Object, _accountMock.Object, _configurationManager, _loggerMock.Object);
 
             // Act
 
